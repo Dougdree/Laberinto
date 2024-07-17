@@ -3,8 +3,8 @@
 #include <time.h>    // Biblioteca para manipulación de tiempo (para srand)
 #include <windows.h> // Biblioteca para funciones específicas de Windows (como Sleep y SetConsoleCursorPosition)
 
-#define ROWS 21      // Definir el número de filas del laberinto
-#define COLS 21      // Definir el número de columnas del laberinto
+#define ROWS 13      // Definir el número de filas del laberinto
+#define COLS 13      // Definir el número de columnas del laberinto
 
 int maze[ROWS][COLS]; // Declarar el laberinto como un arreglo bidimensional
 
@@ -115,14 +115,30 @@ int main() {
 
     // Generar el laberinto aleatorio
     generateMaze(1, 1);
+    FILE *laberinto_archivo;
+    laberinto_archivo= fopen("laberinto_archivo.txt", "w");
+    if(laberinto_archivo==NULL){
+        printf("No se pudo abrir el archivo\n");
+        return 1;
+    }
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            fprintf(laberinto_archivo, "%d", maze[i][j]);
+            if (j < COLS - 1) {
+                fprintf(laberinto_archivo, " "); // Agrega espacio entre columnas
+            }
+            }
+            fprintf(laberinto_archivo, "\n"); // Agrega salto de línea después de cada fila
+        }
+    
+    fclose(laberinto_archivo);
 
     int steps = 0; // Contador de pasos
-    if (solveMaze(1, 1, &steps)) { // Resolver el laberinto
+    if(solveMaze(1, 1, &steps)) { // Resolver el laberinto
         printf("Laberinto resuelto en %d movimientos.\n", steps);
-    } else {
+    }else{
         printf("No se pudo resolver el laberinto.\n");
     }
 
     return 0;
 }
-
